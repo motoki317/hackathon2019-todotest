@@ -1,7 +1,7 @@
 import axios from 'axios';
 import "babel-polyfill";
 
-const url = "http://hackathon-test-server.jichoup.trap.show/";
+const url = "/";
 
 export async function Get(): Promise<Todo[]> {
   // return (await axios.get(url)).data as Todo[]

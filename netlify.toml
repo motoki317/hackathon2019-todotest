@@ -1,0 +1,4 @@
+[[redirects]]
+ from = "/"
+ to = "http://hackathon-test-server.jichoup.trap.show/"
+ status = 200
