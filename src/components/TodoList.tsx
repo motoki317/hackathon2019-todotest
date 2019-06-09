@@ -42,8 +42,6 @@ class TodoList extends React.Component<Props, State> {
       this.setState({
         todos: response
       });
-
-      console.log("Current todos: ", this.state.todos);
     });
   }
 
