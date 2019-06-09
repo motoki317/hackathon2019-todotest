@@ -1,7 +1,7 @@
 import axios from 'axios';
 import "babel-polyfill";
 
-const url = "/";
+const url = "/api";
 
 export async function Get(): Promise<Todo[]> {
   // return (await axios.get(url)).data as Todo[]
