@@ -25,8 +25,6 @@ class TodoList extends React.Component<Props, State> {
       error: null,
     };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.updateTable = this.updateTable.bind(this);
   }
 
@@ -59,7 +57,7 @@ class TodoList extends React.Component<Props, State> {
     });
   }
 
-  handleSubmit(event) {
+  handleSubmit() {
     if (this.state.newTodo.content == '') {
       this.setState({
         error: 'Please input some content to add a new to-do!',
@@ -86,13 +84,25 @@ class TodoList extends React.Component<Props, State> {
     });
   }
 
+  handleDelete(id: string) {
+    Delete(id).then(response => {
+      if (response) {
+        this.setState({
+          todos: this.state.todos.filter(todo => todo.id !== id)
+        });
+      } else {
+        console.error("Delete failed");
+      }
+    });
+  }
 
   render() {
     const todoList = this.state.todos.map((todo, index) => {
       return (
         <tr key={index}>
           <th>{todo.content}</th>
-          <th>{todo.createdAt}</th>
+          <th>{ new Date(todo.createdAt).toLocaleString() }</th>
+          <th><button onClick={() => this.handleDelete(todo.id)}>Delete</button></th>
         </tr>
       );
     });
@@ -101,10 +111,11 @@ class TodoList extends React.Component<Props, State> {
       <div>
         <label>
           Content
-          <input type="text" value={this.state.newTodo.content} onChange={this.handleInputChange}/>
+          <input type="text" value={this.state.newTodo.content} onChange={() => this.handleInputChange(event)}/>
         </label>
-        <button onClick={this.handleSubmit}>Add Todo</button>
+        <button onClick={() => this.handleSubmit()}>Add Todo</button>
         <br/>
+        {this.state.error}
         <br/>
         <table style={
           {
@@ -115,11 +126,12 @@ class TodoList extends React.Component<Props, State> {
             <tr>
               <th>Content</th>
               <th>Created at</th>
+              <th>Delete</th>
             </tr>
             {todoList}
           </tbody>
         </table>
-        {this.state.error}
+
       </div>
     );
   }
