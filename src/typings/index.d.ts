@@ -18,7 +18,7 @@ declare namespace TodoList {
     type Response = { status: 200; data: Todo } | { status: 400; data: 'Bad Request' };
   }
   namespace Delete {
-    type Request = { id: number };
+    type Request = { id: string };
     type Response = { status: 200; data: 'OK' };
   }
 }

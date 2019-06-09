@@ -1,6 +1,16 @@
 import React from "react";
+import styled from "styled-components";
 
-class Clock extends React.Component<{}, {date: Date}> {
+interface Props {}
+interface State {
+  date: Date
+}
+
+const Text = styled.h2`
+  color: lightsalmon;
+`
+
+class Clock extends React.Component<Props, State> {
   private timerID: number;
 
   constructor(props) {
@@ -26,7 +36,7 @@ class Clock extends React.Component<{}, {date: Date}> {
   render() {
     return (
       <div>
-        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+        <Text>It is {this.state.date.toLocaleTimeString()}.</Text>
       </div>
     );
   }

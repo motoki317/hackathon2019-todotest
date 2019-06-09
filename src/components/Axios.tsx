@@ -9,7 +9,7 @@ export async function Get(): Promise<Todo[]> {
 
   return axios.get(url).then((response) => {
     console.log("Get Success: ", response);
-    return response.data as Todo[];
+    return response.data.todos as Todo[];
   }).catch((error: TodoList.Get.Response) => {
     console.error("Get Error: ", error);
     return [];
