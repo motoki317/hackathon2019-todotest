@@ -1,5 +1,6 @@
 import React from 'react';
 import {Get, Post, Delete} from './Axios';
+import Timeout = NodeJS.Timeout;
 
 interface Props {
 }
@@ -11,7 +12,7 @@ interface State {
 }
 
 class TodoList extends React.Component<Props, State> {
-  private timerID: number = 0;
+  private timerID: number;
 
   constructor(props: any) {
     super(props);
@@ -55,7 +56,9 @@ class TodoList extends React.Component<Props, State> {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
+
     if (this.state.newTodo.content == '') {
       this.setState({
         error: 'Please input some content to add a new to-do!',
@@ -107,11 +110,13 @@ class TodoList extends React.Component<Props, State> {
 
     return (
       <div>
-        <label>
-          Content
-          <input type="text" value={this.state.newTodo.content} onChange={() => this.handleInputChange(event)}/>
-        </label>
-        <button onClick={() => this.handleSubmit()}>Add Todo</button>
+        <form onSubmit={(event) => this.handleSubmit(event)}>
+          <label>
+            Content
+            <input type="text" value={this.state.newTodo.content} onChange={() => this.handleInputChange(event)}/>
+          </label>
+          <input type="submit" value={'Add Todo'}/>
+        </form>
         <br/>
         {this.state.error}
         <br/>

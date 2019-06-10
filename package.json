@@ -8,19 +8,19 @@
     "start": "parcel src/index.html -p 2000",
     "build": "parcel build src/index.html"
   },
+  "proxy": "http://hackathon-test-server.jichoup.trap.show",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^12.0.7",
     "axios": "^0.19.0",
     "babel-polyfill": "^6.26.0",
-    "http-proxy-middleware": "^0.19.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "styled-components": "^4.3.1"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/node": "^12.0.7",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "parcel-bundler": "^1.12.3",

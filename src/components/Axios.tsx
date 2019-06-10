@@ -1,7 +1,7 @@
 import axios from 'axios';
 import "babel-polyfill";
 
-const url = "/api";
+const url = process.env.NODE_ENV === 'development' ? "http://hackathon-test-server.jichoup.trap.show" : "/api/";
 
 export async function Get(): Promise<Todo[]> {
   // return (await axios.get(url)).data as Todo[]
