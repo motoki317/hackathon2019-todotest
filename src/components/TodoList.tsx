@@ -1,6 +1,5 @@
 import React from 'react';
 import {Get, Post, Delete} from './Axios';
-import Timeout = NodeJS.Timeout;
 
 interface Props {
 }
@@ -41,7 +40,7 @@ class TodoList extends React.Component<Props, State> {
   updateTable() {
     Get().then(response => {
       this.setState({
-        todos: response
+        todos: response.reverse()
       });
     });
   }
@@ -72,7 +71,9 @@ class TodoList extends React.Component<Props, State> {
 
     Post(this.state.newTodo).then(response => {
       this.setState((state) => {
-        state.todos.push(response);
+        return {
+          todos: [response, ...state.todos]
+        };
       });
 
       this.setState({
@@ -97,6 +98,19 @@ class TodoList extends React.Component<Props, State> {
     });
   }
 
+  onKeyDown(event): void {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (event.key === 'Enter' && this.hasModifierKey(event)) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.handleSubmit(event);
+    }
+  }
+
+  hasModifierKey(event): boolean {
+    return event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+  }
+
   render() {
     const todoList = this.state.todos.map((todo, index) => {
       return (
@@ -112,8 +126,8 @@ class TodoList extends React.Component<Props, State> {
       <div>
         <form onSubmit={(event) => this.handleSubmit(event)}>
           <label>
-            Content
-            <input type="text" value={this.state.newTodo.content} onChange={() => this.handleInputChange(event)}/>
+            Content <br/>
+            <textarea onKeyDown={(event) => this.onKeyDown(event)} value={this.state.newTodo.content} onChange={() => this.handleInputChange(event)}/>
           </label>
           <input type="submit" value={'Add Todo'}/>
         </form>
