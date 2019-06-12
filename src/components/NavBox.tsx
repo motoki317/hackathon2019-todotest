@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Page } from '../App';
 
 interface Props {
   pages: Page[];
@@ -34,7 +36,7 @@ class NavBox extends Component<Props, State> {
   render() {
     const pageList = this.props.pages.map((page) => {
       return (
-        <StyledLink key={page.name} to={page.name}>{page.displayName}</StyledLink>
+        <StyledLink key={page.name} to={page.name}> <FontAwesomeIcon icon={page.icon} /> {page.displayName}</StyledLink>
       );
     });
 

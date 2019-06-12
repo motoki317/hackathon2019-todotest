@@ -7,8 +7,8 @@ import TodoList from "./components/TodoList";
 import AddTodo from './components/AddTodo';
 import { Post } from './components/Axios';
 import NavBox from './components/NavBox';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { library, IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faCoffee, faHome, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Title = ({className}) => {
@@ -18,6 +18,8 @@ const Title = ({className}) => {
     </div>
   );
 };
+
+export type Page = { name: string, displayName: string, icon: IconDefinition };
 
 const StyledTitle = styled(Title)`
   font-size: 1.5em;
@@ -35,11 +37,13 @@ export type Pages = '/' | '/add';
 const pages: Page[] = [
   {
     name: '/',
-    displayName: "Todo-List"
+    displayName: "Todo-List",
+    icon: faHome
   },
   {
     name: '/add',
-    displayName: 'Add Todo'
+    displayName: 'Add Todo',
+    icon: faPlus
   }
 ];
 
@@ -51,7 +55,7 @@ export default class App extends Component<Props, State> {
       page: '/'
     };
 
-    library.add(faCoffee);
+    library.add(faCoffee, faHome, faPlus);
   }
 
   render() {

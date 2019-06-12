@@ -1,6 +1,5 @@
 // idはサーバーで生成します
 type Todo = { id: string; content: string; createdAt: string };
-type Page = { name: string, displayName: string };
 
 declare namespace TodoList {
   namespace Get {
