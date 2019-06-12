@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Timeout = NodeJS.Timeout;
 
 interface Props {}
 interface State {
@@ -11,7 +12,7 @@ const Text = styled.h2`
 `
 
 class Clock extends React.Component<Props, State> {
-  private timerID: number;
+  private timerID: Timeout;
 
   constructor(props) {
     super(props);

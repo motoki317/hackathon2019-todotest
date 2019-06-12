@@ -1,31 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Get, Post, Delete} from './Axios';
+import AddTodo from './AddTodo';
 
 interface Props {
 }
 
 interface State {
   todos: Todo[];
-  newTodo: Todo;
   error: any
 }
 
-class TodoList extends React.Component<Props, State> {
-  private timerID: number;
+class TodoList extends Component<Props, State> {
+  private timerID: number = 0;
 
   constructor(props: any) {
     super(props);
     this.state = {
       todos: [],
-      newTodo: {
-        id: '',
-        content: '',
-        createdAt: '',
-      },
       error: null,
     };
 
     this.updateTable = this.updateTable.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount(): void {
@@ -45,20 +41,10 @@ class TodoList extends React.Component<Props, State> {
     });
   }
 
-  handleInputChange(event) {
-    this.setState({
-      newTodo: {
-        id: '',
-        content: event.target.value,
-        createdAt: '',
-      },
-    });
-  }
-
-  handleSubmit(event) {
+  async handleSubmit(event, newTodo: Todo): void {
     event.preventDefault();
 
-    if (this.state.newTodo.content == '') {
+    if (newTodo.content == '') {
       this.setState({
         error: 'Please input some content to add a new to-do!',
       });
@@ -69,19 +55,11 @@ class TodoList extends React.Component<Props, State> {
       error: null,
     });
 
-    Post(this.state.newTodo).then(response => {
+    await Post(newTodo).then(response => {
       this.setState((state) => {
         return {
           todos: [response, ...state.todos]
         };
-      });
-
-      this.setState({
-        newTodo: {
-          id: '',
-          content: '',
-          createdAt: '',
-        },
       });
     });
   }
@@ -98,19 +76,6 @@ class TodoList extends React.Component<Props, State> {
     });
   }
 
-  onKeyDown(event): void {
-    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
-    if (event.key === 'Enter' && this.hasModifierKey(event)) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.handleSubmit(event);
-    }
-  }
-
-  hasModifierKey(event): boolean {
-    return event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
-  }
-
   render() {
     const todoList = this.state.todos.map((todo, index) => {
       return (
@@ -124,13 +89,7 @@ class TodoList extends React.Component<Props, State> {
 
     return (
       <div>
-        <form onSubmit={(event) => this.handleSubmit(event)}>
-          <label>
-            Content <br/>
-            <textarea onKeyDown={(event) => this.onKeyDown(event)} value={this.state.newTodo.content} onChange={() => this.handleInputChange(event)}/>
-          </label>
-          <input type="submit" value={'Add Todo'}/>
-        </form>
+        <AddTodo handleSubmit={this.handleSubmit}/>
         <br/>
         {this.state.error}
         <br/>
