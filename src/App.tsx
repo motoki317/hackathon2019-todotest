@@ -1,30 +1,44 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { BrowserRouter, Route } from "react-router-dom";
 
 import Clock from "./components/Clock";
 import TodoList from "./components/TodoList";
 import AddTodo from './components/AddTodo';
 import { Post } from './components/Axios';
 import NavBox from './components/NavBox';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Title = styled.h1`
+const Title = ({className}) => {
+  return (
+    <div className={className}>
+      <h1>Hello World!<FontAwesomeIcon icon={faCoffee} /></h1>
+    </div>
+  );
+};
+
+const StyledTitle = styled(Title)`
   font-size: 1.5em;
   text-align: center;
-  color: palevioletred;
+  color: lightgreen;
 `;
 
 interface Props {}
 interface State {
-  page: 'LIST' | 'ADD';
+  page: Pages;
 }
+
+export type Pages = '/' | '/add';
 
 const pages: Page[] = [
   {
-    name: 'LIST',
+    name: '/',
     displayName: "Todo-List"
   },
   {
-    name: 'ADD',
+    name: '/add',
     displayName: 'Add Todo'
   }
 ];
@@ -34,44 +48,24 @@ export default class App extends Component<Props, State> {
     super(props);
 
     this.state = {
-      page: 'LIST'
+      page: '/'
     };
 
-    this.onPageSelect = this.onPageSelect.bind(this);
-  }
-
-  onPageSelect(page) {
-    this.setState({
-      page: page
-    });
+    library.add(faCoffee);
   }
 
   render() {
-    let view;
-
-    switch (this.state.page) {
-      case 'LIST':
-        view = <TodoList/>;
-        break;
-      case 'ADD':
-        view = (
-          <AddTodo handleSubmit={(event, newTodo) => {
-              Post(newTodo)
-            }
-          }/>
-        );
-        break;
-      default:
-        view = <TodoList />;
-        break;
-    }
-
     return (
         <div>
-          <NavBox pages={pages} onSelect={this.onPageSelect}/>
-          <Title>Hello World!</Title>
-          <Clock />
-          {view}
+          <BrowserRouter>
+            <NavBox pages={pages}/>
+            <StyledTitle />
+            <Clock />
+            <div>
+              <Route exact path={'/'} component={TodoList} />
+              <Route path={'/add'} render={() => {return <AddTodo handleSubmit={(event, newTodo) => {Post(newTodo)}}/>}}/>
+            </div>
+          </BrowserRouter>
         </div>
     );
   }

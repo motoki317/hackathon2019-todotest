@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 interface Props {
   pages: Page[];
-  onSelect: Function;
 }
 interface State {}
 
@@ -12,7 +12,9 @@ const Nav = styled.div`
   border-bottom: 1px solid #eee;
 `;
 
-const StyledButton = styled.div`
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  display: block;
   line-height: 50px;
   padding: 0 25px;
   color: rgba(0, 0, 0, 0.5);
@@ -25,10 +27,14 @@ const StyledButton = styled.div`
 `;
 
 class NavBox extends Component<Props, State> {
+  constructor(props: any) {
+    super(props);
+  }
+
   render() {
     const pageList = this.props.pages.map((page) => {
       return (
-        <StyledButton key={page.name} onClick={() => this.props.onSelect(page.name)}>{page.displayName}</StyledButton>
+        <StyledLink key={page.name} to={page.name}>{page.displayName}</StyledLink>
       );
     });
 

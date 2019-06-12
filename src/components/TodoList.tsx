@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import {Get, Post, Delete} from './Axios';
 import AddTodo from './AddTodo';
+import { store } from '../utils/TodoStore';
+import { observer } from 'mobx-react';
 
-interface Props {
-}
+interface Props {}
 
 interface State {
-  todos: Todo[];
   error: any
 }
 
+@observer
 class TodoList extends Component<Props, State> {
   private timerID: number = 0;
 
   constructor(props: any) {
     super(props);
     this.state = {
-      todos: [],
       error: null,
     };
 
@@ -35,13 +35,11 @@ class TodoList extends Component<Props, State> {
 
   updateTable() {
     Get().then(response => {
-      this.setState({
-        todos: response.reverse()
-      });
+      store.todos = response.reverse();
     });
   }
 
-  async handleSubmit(event, newTodo: Todo): void {
+  async handleSubmit(event, newTodo: Todo) {
     event.preventDefault();
 
     if (newTodo.content == '') {
@@ -56,20 +54,14 @@ class TodoList extends Component<Props, State> {
     });
 
     await Post(newTodo).then(response => {
-      this.setState((state) => {
-        return {
-          todos: [response, ...state.todos]
-        };
-      });
+      store.todos = [response, ...store.todos];
     });
   }
 
   handleDelete(id: string) {
     Delete(id).then(response => {
       if (response) {
-        this.setState({
-          todos: this.state.todos.filter(todo => todo.id !== id)
-        });
+        store.todos = store.todos.filter(todo => todo.id !== id);
       } else {
         console.error("Delete failed");
       }
@@ -77,7 +69,7 @@ class TodoList extends Component<Props, State> {
   }
 
   render() {
-    const todoList = this.state.todos.map((todo, index) => {
+    const todoList = store.todos.map((todo, index) => {
       return (
         <tr key={index}>
           <th>{todo.content}</th>
